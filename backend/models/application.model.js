@@ -1,0 +1,18 @@
+import mongoose from "mongoose";
+const applicationSchema=new mongoose.Schema({
+    job:{
+    type:mongoose.Schema.Types.ObjectId, //create relation with job
+    ref:"Job",
+    required:true
+    },
+    applicant:{
+        type:mongoose.Schema.Types.ObjectId, //create relation with user
+    ref:"User",
+    required:true
+    },
+    status:{type:String,
+        enum:['pending','accepted','rejected'],
+    default:'pending'}
+
+},timeStamp=true)
+export const Application=mongoose.model('Application',applicationSchema)
