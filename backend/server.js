@@ -7,7 +7,7 @@ import mongoose from 'mongoose'; // ES Module
 import userRoute from './routes/user.route.js';
 import companyRoute from "./routes/company.route.js"
 import jobRoutes from './routes/job.route.js';
-
+import applicationRoutes from './routes/application.route.js';
 
 dotenv.config({});
 const app =express();
@@ -27,6 +27,7 @@ const port = process.env.PORT||3000;
 app.use("/api/v1/User",userRoute);
 app.use("/api/v1/Company",companyRoute);
 app.use('/api/v1/job', jobRoutes);
+app.use('/api/v1/application', applicationRoutes);
 app.listen(port,()=>{
     connectDB();
     console.log(`server is running on port ${port}`)
