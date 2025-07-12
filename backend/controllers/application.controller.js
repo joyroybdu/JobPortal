@@ -1,4 +1,6 @@
 import { Application } from "../models/application.model.js";
+import Job from "../models/job.model.js";
+
 
 export const applyJob=async(req,res)=>{
     try {
@@ -40,7 +42,7 @@ export const applyJob=async(req,res)=>{
             // application:newApplication
          });
     } catch (error) {
-        console.error("Error applying for job:", error);
+        console.error( error);
     }
 }
 export const getAppliedJobs=async(req,res)=>{
@@ -65,7 +67,7 @@ export const getAppliedJobs=async(req,res)=>{
           
             applications,
             success:true
-        });cess
+        });
     } catch (error) {
         console.log(error);
     }
@@ -114,7 +116,7 @@ export const updateStatus=async(req,res)=>{
             });
         }
         //upadate status
-        application.status=status.toLowercase();
+        application.status=status.toLowerCase();
         await application.save();
         return res.status(200).json({
             message:"Application status updated successfully",
