@@ -1,5 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
 import {
   Popover,
   PopoverTrigger,
@@ -39,14 +41,15 @@ const Navbar = () => {
 
           {!user ? (
             <div className="flex gap-2">
+            <Link to='/login'>
               <Button variant="outline" className="flex items-center gap-1 cursor-pointer">
                 <LogIn className="w-4 h-4" />
                 Login
-              </Button>
-              <Button variant="default" className="flex items-center gap-1 cursor-pointer">
+              </Button ></Link>
+             <Link to='/signup'> <Button variant="default" className="flex items-center gap-1 cursor-pointer">
                 <UserPlus className="w-4 h-4" />
                 Sign Up
-              </Button>
+              </Button></Link>
             </div>
           ) : (
             <Popover>

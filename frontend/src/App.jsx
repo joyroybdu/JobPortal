@@ -1,7 +1,26 @@
 import { useState } from 'react'
 import React from 'react'
 import './App.css'
-import Navbar from './components/ui/shared/Navbar'
+import Navbar from './components/shared/Navbar'
+import Home from './components/Home'
+import Login from './components/auth/Login'
+import Signup from './components/auth/Signup'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+const appRouter=createBrowserRouter([
+  {
+    path: '/',
+    element:<Home/>,
+  },
+  {
+    path: '/login',
+    element:<Login/>,
+  },
+  {
+    path:'/signup',
+    element:<Signup/>
+  }
+
+])
 
 function App() {
   
@@ -9,7 +28,7 @@ function App() {
   return (
     <>
   
-      <Navbar/>
+     <RouterProvider router={appRouter}/>
     </>
   )
 }
