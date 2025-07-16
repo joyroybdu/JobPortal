@@ -15,7 +15,7 @@ const HeroSection = () => {
           <div className="w-full md:w-2/3 relative">
             <input
               type="text"
-              placeholder="🔍 Search job title, company, or keyword..."
+              placeholder="Search job title, company, or keyword..."
               className="w-full px-5 py-3 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
             />
           </div>
