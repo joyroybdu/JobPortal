@@ -34,9 +34,16 @@ const Navbar = () => {
         {/* Navigation + Auth/Profile */}
         <div className="flex items-center gap-4">
           <ul className="hidden md:flex space-x-6 text-gray-700 font-medium">
-            <li className="cursor-pointer hover:text-blue-600 transition">Home</li>
-            <li className="cursor-pointer hover:text-blue-600 transition">Jobs</li>
-            <li className="cursor-pointer hover:text-blue-600 transition">Browse</li>
+          <li>
+  <Link to="/" className="cursor-pointer hover:text-blue-600 transition">Home</Link>
+</li>
+<li>
+  <Link to="/jobs" className="cursor-pointer hover:text-blue-600 transition">Jobs</Link>
+</li>
+<li>
+  <Link to="/browse" className="cursor-pointer hover:text-blue-600 transition">Browse</Link>
+</li>
+
           </ul>
 
           {!user ? (
