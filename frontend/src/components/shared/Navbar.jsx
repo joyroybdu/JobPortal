@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux"; // 🆕 import
 
 import {
   Popover,
@@ -20,9 +21,10 @@ import {
   UserCircle2,
 } from "lucide-react"; 
 
-const user = false; 
+
 
 const Navbar = () => {
+  const {user}=useSelector((state) => state.auth); // 🆕 Get user from redux
   return (
     <div className="bg-white shadow-md">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16 px-4">
@@ -80,7 +82,7 @@ const Navbar = () => {
                     className="w-full flex items-center gap-2"
                   >
                     <UserCircle2 className="w-4 h-4 cursor-pointer" />
-                    View Profile
+                   <Link to='profile'> View Profile</Link>
                   </Button>
                   <Button
                     variant="destructive"

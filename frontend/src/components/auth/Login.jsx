@@ -4,9 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { USER_API_END_POINT } from '../../constant/constant';
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux'; // 🆕 import
+import { setUser } from '../../redux/authSlice'; // 🆕 import (adjust path if needed)
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // 🆕 useDispatch
+
   const [input, setInput] = useState({
     email: '',
     password: '',
@@ -46,6 +50,10 @@ const Login = () => {
 
       if (res.data.success) {
         toast.success(res.data.message || 'Login successful!');
+
+        // 🆕 Set user to redux
+        dispatch(setUser(res.data.user)); // 👈 key name is user, not User
+
         navigate('/');
       } else {
         toast.error(res.data.message || 'Login failed!');
@@ -75,7 +83,7 @@ const Login = () => {
                 name="email"
                 value={input.email}
                 onChange={handleChange}
-                pattern="^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$"
+                pattern="^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
                 title="Enter a valid email address"
                 required
                 className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -102,7 +110,7 @@ const Login = () => {
               </button>
             </div>
 
-            {/* Role: Student / Recruiter */}
+            {/* Role */}
             <div className="flex items-center gap-6 mt-2">
               <label className="inline-flex items-center">
                 <input
@@ -130,7 +138,7 @@ const Login = () => {
               </label>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -142,7 +150,7 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Signup Link */}
+          {/* Signup */}
           <p className="text-sm text-center text-gray-600 mt-4">
             Don't have an account?{' '}
             <Link to="/signup" className="text-indigo-600 font-medium hover:underline">

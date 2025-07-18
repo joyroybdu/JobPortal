@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 const Job = () => {
   return (
-    <div className="w-full p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 space-y-4">
+    <div className="max-w-full p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 space-y-4">
       
       {/* Avatar + Company Info */}
       <div className="flex items-center gap-4">
@@ -13,6 +13,7 @@ const Job = () => {
           <AvatarImage src="https://i.pravatar.cc/150?img=5" alt="Company Logo" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
+    
         <div>
           <h1 className="text-lg font-semibold text-gray-800 transition-colors hover:text-blue-600">
             Company Name
@@ -57,13 +58,13 @@ const Job = () => {
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <Button
           variant="default"
-          className="w-full sm:w-auto transition-all duration-200 hover:scale-105 cursor-pointer"
+          className="w-full sm:w-auto min-w-[120px] transition-all duration-200 hover:scale-105 cursor-pointer"
         >
           Details
         </Button>
         <Button
           variant="outline"
-          className="w-full sm:w-auto transition-all duration-200 hover:border-blue-600 hover:text-blue-600 hover:scale-105 cursor-pointer"
+          className="w-full sm:w-auto min-w-[120px] transition-all duration-200 hover:border-blue-600 hover:text-blue-600 hover:scale-105 cursor-pointer"
         >
           Save For Later
         </Button>
