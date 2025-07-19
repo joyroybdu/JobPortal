@@ -4,11 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge, Contact, Mail, Pen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AppliedJobTable from "./AppliedJobTable";
+import EditProfileModal from "./EditProfileModel";
+import { useState } from "react";
 
 const skills = ["JavaScript", "React", "Node.js", "CSS", "HTML"];
 const isResumeHave = true;
 
+
 const Profile = () => {
+  const [open,setOpen] = useState(false);
   return (
     <div>
       <Navbar />
@@ -21,7 +25,7 @@ const Profile = () => {
               <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User Avatar" />
               <AvatarFallback>JR</AvatarFallback>
             </Avatar>
-            <Button variant="outline" className="flex items-center gap-1">
+            <Button onClick={()=>setOpen(true)} variant="outline" className="flex items-center gap-1">
               <Pen className="w-4 h-4" /> Edit
             </Button>
           </div>
@@ -85,6 +89,8 @@ const Profile = () => {
           <AppliedJobTable />
         </div>
       </div>
+      {/* Edit Profile Modal */}
+      <EditProfileModal open={open} setOpen={setOpen} />
     </div>
   );
 };

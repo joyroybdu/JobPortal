@@ -2,8 +2,11 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const Job = () => {
+ const navigate = useNavigate();
+  const jobId = "12345"; // Example job ID, replace with actual logic to get job ID
   return (
     <div className="max-w-full p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 space-y-4">
       
@@ -56,7 +59,7 @@ const Job = () => {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
-        <Button
+        <Button onClick={() => navigate(`/description/${jobId}`)}
           variant="default"
           className="w-full sm:w-auto min-w-[120px] transition-all duration-200 hover:scale-105 cursor-pointer"
         >
