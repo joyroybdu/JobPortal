@@ -141,7 +141,7 @@ export const authMiddleware = (req, res, next) => {
 
     // Verify token
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.user = { id: decoded.id };  
+    req.user.id = { id: decoded.id };  //chnaged 
 
     next();
   } catch (error) {
@@ -171,8 +171,8 @@ export const userUpdateProfile = async (req, res) => {
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
     if (phoneNumber) user.phoneNumber = phoneNumber;
-    if (bio) user.bio = bio;
-    if (skillsArray) user.skills = skillsArray;
+    if (bio) user.profile.bio = bio;//changed
+    if (skillsArray) user.profile.skills = skillsArray;
 
     await user.save();
 

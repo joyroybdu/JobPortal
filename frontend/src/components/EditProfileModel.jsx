@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-// import { toast } from "@/components/ui/sonner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+
 
 import axios from 'axios';
 import { USER_API_END_POINT } from '@/constant/constant';
@@ -57,20 +60,32 @@ const EditProfileModel = ({ open, setOpen }) => {
 
       if (res.data.success) {
         dispatch(setUser(res.data.user));
-        toast.success(res.data.message);
+     toast.success('✅ Profile updated successfully!');
         setOpen(false);
       } else {
-        toast.error(res.data.message || 'Update failed');
+        
+          toast.error('❌ Failed to update profile.');
       }
     } catch (error) {
-      console.error(error);
-    //   toast.error(error?.response?.data?.message || 'Something went wrong');
+       console.error(error);
+      toast.error('🚫 Server Error! Please try again later.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
+    <>
+     <ToastContainer 
+        position="top-right" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop 
+        closeOnClick 
+        pauseOnHover 
+        draggable 
+        theme="colored" 
+      />
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
@@ -174,6 +189,7 @@ const EditProfileModel = ({ open, setOpen }) => {
         </form>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 
