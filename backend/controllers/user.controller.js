@@ -177,14 +177,28 @@ export const userUpdateProfile = async (req, res) => {
     await user.save();
 
     // Prepare response
+    // const updatedUser = {
+    //   _id: user._id,
+    //   fullname: user.fullname,
+    //   email: user.email,
+    //   phoneNumber: user.phoneNumber,
+    //   bio: user.bio,
+    //   skills: user.skills
+    // };
     const updatedUser = {
-      _id: user._id,
-      fullname: user.fullname,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      bio: user.bio,
-      skills: user.skills
-    };
+  _id: user._id,
+  fullname: user.fullname,
+  email: user.email,
+  phoneNumber: user.phoneNumber,
+  profile: {
+    bio: user.profile.bio,
+    skills: user.profile.skills,
+    resume: user.profile.resume,
+    resumeOriginalName: user.profile.resumeOriginalName,
+    company: user.profile.company
+  }
+};
+
 
     return res.status(200).json({
       message: "Profile updated successfully",
