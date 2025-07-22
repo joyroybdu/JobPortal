@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Load user from localStorage (for persistence)
+const storedUser = localStorage.getItem("user");
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: false,
-    user: null,
+    user: storedUser ? JSON.parse(storedUser) : null,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -12,6 +15,13 @@ const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
+
+      // Save or clear localStorage
+      if (action.payload) {
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      } else {
+        localStorage.removeItem("user");
+      }
     },
   },
 });
