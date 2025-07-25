@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudniary from "../utils/cloudinary.js";
 
 
 // REGISTER CONTROLLER
@@ -153,6 +155,9 @@ export const userUpdateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file; 
+    const fileUri=getDataUri(file);
+    const cloudResponse=await cloudniary.uploader.upload(fileUri.content);
+    
     const userId = req.id;
 
     // Convert skills string to array
@@ -173,6 +178,10 @@ export const userUpdateProfile = async (req, res) => {
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;//changed
     if (skillsArray) user.profile.skills = skillsArray;
+    if(cloudResponse){
+      user.profile.resume=cloudResponse.secure_url 
+      user.profile.resumeOriginalName=file.originalname
+    }
 
     await user.save();
 

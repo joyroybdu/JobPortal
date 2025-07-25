@@ -1,185 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from './ui/dialog'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
+import { useDispatch, useSelector } from 'react-redux'
+import { CloudHail } from 'lucide-react'
+import { USER_API_END_POINT } from '@/constant/constant'
+import { setUser } from '@/redux/authSlice'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
-import axios from 'axios';
-import { USER_API_END_POINT } from '@/constant/constant';
-import { setUser } from '@/redux/authSlice';
 
 const EditProfileModel = ({ open, setOpen }) => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.auth);
-
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector(store => store.auth)
+
   const [input, setInput] = useState({
-    fullname: '',
-    email: '',
-    phoneNumber: '',
-    bio: '',
-    skills: ''
+    fullname: user?.fullname || '',
+    email: user?.email || '',
+    phoneNumber: user?.phoneNumber || '',
+    bio: user?.profile?.bio || '',
+    skills: user?.profile?.skills?.join(', ') || '',
+    file: user?.profile?.resume || ''
   });
-
-  useEffect(() => {
-    if (user && open) {
-      setInput({
-        fullname: user.fullname || '',
-        email: user.email || '',
-        phoneNumber: user.phoneNumber || '',
-        bio: user.profile?.bio || '',
-        skills: Array.isArray(user.profile?.skills) ? user.profile.skills.join(', ') : ''
-      });
-    }
-  }, [user, open]);
-
+  const dispatch=useDispatch();
   const changeEventHandler = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
+    setInput({...input,[e.target.name]:e.target.value})
+  }
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+  const formData=new FormData();
+  formData.append('fullname',input.fullname);
+  formData.append('email',input.email);
+  formData.append('phoneNumber',input.phoneNumber);
+  formData.append('bio',input.bio);
+  // formData.append('skills',input.skills);
+  formData.append('skills', JSON.stringify(input.skills.split(',').map(skill => skill.trim())));
 
+  if(input){
+    formData.append('file',input.file);
     try {
-      const formData = new FormData();
-      formData.append('fullname', input.fullname);
-      formData.append('email', input.email);
-      formData.append('phoneNumber', input.phoneNumber);
-      formData.append('bio', input.bio);
-
-      const skillsArray = input.skills
-        .split(',')
-        .map(skill => skill.trim())
-        .filter(skill => skill.length > 0);
-
-      formData.append('skills', JSON.stringify(skillsArray));
-
-      const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+   
+      const res= await axios.post(`${USER_API_END_POINT}/profile/update`,formData,{
+        headers:{
+          'Content-Type':'multipart/form-data'
         },
-        withCredentials: true,
-      });
+        withCredentials:true
 
-      if (res.data.success) {
-        dispatch(setUser(res.data.data));
-        toast.success(res.data.message || 'Profile updated successfully!');
-        setOpen(false);
-      } else {
-        toast.error(res.data.message || 'Failed to update profile.');
+      });
+      if(res.data.success){
+        dispatch(setUser(res.data.user));
+        toast.success(res.data.message);
+        console.log("✅ Profile updated successfully:", res.data.user);
+
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || 'Server error. Try again later.');
-    } finally {
-      setLoading(false);
+      console.log(error);
+      toast.error(error.response.data.message);
     }
-  };
+  }
+  setInput(false);
+    console.log(input);
+  }
+
+
+    const fileChangeHandler=(e)=>{
+      const file=e.target.files?.[0];
+      setInput({...input,file})
+    }
 
   return (
-    <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        pauseOnHover
-        draggable
-        theme="colored"
-      />
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">Update Profile</DialogTitle>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className='sm:max-w-[425px]' onInteractOutside={() => setOpen(false)}>
+        {/* Close Button */}
+        <DialogClose asChild>
+          <button
+            onClick={() => setOpen(false)}
+            onChange={changeEventHandler}
+            className="absolute right-4 top-4 text-gray-500 hover:text-black text-xl"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </DialogClose>
 
-          <form onSubmit={submitHandler} className="space-y-4 mt-4">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="fullname" className="text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                id="fullname"
-                name="fullname"
-                value={input.fullname}
-                onChange={changeEventHandler}
-                placeholder="Enter your full name"
-                className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+        <DialogHeader>
+          <DialogTitle>Edit Profile</DialogTitle>
+        </DialogHeader>
+
+        <form className="space-y-4" action="" onSubmit={submitHandler}>
+          <div className="grid grid-cols-1 gap-4">
+            <div className="flex flex-col">
+              <label htmlFor="fullname">Name</label>
+              <Input id='fullname' name='fullname' className='w-full' value={input.fullname}   onChange={changeEventHandler} />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={input.email}
-                onChange={changeEventHandler}
-                placeholder="Enter your email"
-                className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+            <div className="flex flex-col">
+              <label htmlFor="email">Email</label>
+              <Input id='email' name='email' className='w-full' value={input.email}  onChange={changeEventHandler}/>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="phoneNumber" className="text-sm font-medium text-gray-700">Phone Number</label>
-              <input
-                type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
-                value={input.phoneNumber}
-                onChange={changeEventHandler}
-                placeholder="Enter your phone number"
-                className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+            <div className="flex flex-col">
+              <label htmlFor="phoneNumber">Number</label>
+              <Input id='phoneNumber' name='phoneNumber' className='w-full' value={input.phoneNumber}   onChange={changeEventHandler} />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="bio" className="text-sm font-medium text-gray-700">Bio</label>
-              <textarea
-                id="bio"
-                name="bio"
-                value={input.bio}
-                onChange={changeEventHandler}
-                placeholder="Write a short bio..."
-                rows="3"
-                className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
+            <div className="flex flex-col">
+              <label htmlFor="bio">Bio</label>
+              <Input id='bio' name='bio' className='w-full' value={input.bio}   onChange={changeEventHandler} />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label htmlFor="skills" className="text-sm font-medium text-gray-700">Skills (comma separated)</label>
-              <input
-                type="text"
-                id="skills"
-                name="skills"
-                value={input.skills}
-                onChange={changeEventHandler}
-                placeholder="e.g., React, Node.js, MongoDB"
-                className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="flex flex-col">
+              <label htmlFor="skills">Skills</label>
+              <Input id='skills' name='skills' className='w-full' value={input.skills}   onChange={changeEventHandler} />
             </div>
 
-            <div className="pt-2">
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
-              >
-                {loading ? 'Saving...' : 'Save Changes'}
-              </Button>
+            <div className="flex flex-col">
+              <label htmlFor="file">Resume</label>
+              <Input id='file' name='file' type='file' className='w-full' accept='application/pdf' onChange={fileChangeHandler} />
             </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
+          </div>
 
-export default EditProfileModel;
+          <DialogFooter>
+            {
+              loading
+                ? <Button disabled variant='default'>Please Wait</Button>
+                : <Button type="submit">Update</Button>
+            }
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default EditProfileModel

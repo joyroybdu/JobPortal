@@ -48,9 +48,9 @@ const Profile = () => {
           <div>
             <h2 className="text-xl font-semibold mb-2 text-gray-800">Your Skills</h2>
             <div className="flex flex-wrap gap-2">
-              {user?.profile?.skills?.length > 0 ? (
+              {user?.profile?.skills && user.profile.skills.length !== 0 ? (
                 user.profile.skills.map((item, index) => (
-                  <Badge key={index} variant="secondary">
+                  <Badge key={index}>
                     {item}
                   </Badge>
                 ))
@@ -59,6 +59,36 @@ const Profile = () => {
               )}
             </div>
           </div>
+          {/* Resume Section */}
+<div className="bg-white shadow-md p-6 rounded-xl">
+  <h2 className="text-xl font-semibold mb-2 text-gray-800">Resume</h2>
+  {user?.profile?.resume ? (
+    <div className="flex items-center justify-between">
+      <p className="text-gray-600">
+        {user.profile.resumeOriginalName || "Resume uploaded"}
+      </p>
+      <a
+        href={user?.profile?.resume}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 underline"
+      >
+        Download
+      </a>
+    </div>
+  ) : (
+    <p className="text-sm text-gray-500">No resume uploaded.</p>
+  )}
+</div>
+
+          
+        </div>
+
+
+        {/* Bio Section (Optional) */}
+        <div className="bg-white shadow-md p-6 rounded-xl">
+          <h2 className="text-xl font-semibold mb-2 text-gray-800">Bio</h2>
+          <p className="text-gray-600">{user?.profile?.bio || "No bio provided."}</p>
         </div>
 
         {/* Applied Jobs Table */}
@@ -67,6 +97,7 @@ const Profile = () => {
           <AppliedJobTable />
         </div>
       </div>
+      
 
       {/* Edit Profile Modal */}
       <EditProfileModal open={open} setOpen={setOpen} />
