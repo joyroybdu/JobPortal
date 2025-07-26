@@ -20,7 +20,7 @@ const Profile = () => {
           {/* Left - Avatar */}
           <div className="flex flex-col items-center space-y-3">
             <Avatar className="w-28 h-28">
-              <AvatarImage src={"https://i.pravatar.cc/150"} alt="User Avatar" />
+              <AvatarImage src={user.profile.profilePhoto} />
               <AvatarFallback>{user?.fullname?.charAt(0)}</AvatarFallback>
             </Avatar>
             <Button onClick={() => setOpen(true)} variant="outline" className="flex items-center gap-1">

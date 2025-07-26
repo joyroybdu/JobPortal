@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
-import cloudniary from "../utils/cloudinary.js";
+import cloudinary from "../utils/cloudinary.js";
 
 
 // REGISTER CONTROLLER
@@ -24,6 +24,9 @@ export const register = async (req, res) => {
       });
     
     }
+    const file=req.file;
+    const fileUri=getDataUri(file);
+    const cloudResponse=await cloudinary.uploader.upload(fileUri.content);
 
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -33,6 +36,9 @@ export const register = async (req, res) => {
       phoneNumber,
       password: hashPassword,
       role,
+      profile:{
+        profilePhoto:cloudResponse.secure_url,
+      }
     });
 
     return res.status(201).json({
@@ -40,7 +46,9 @@ export const register = async (req, res) => {
       success: true,
     });
   } catch (error) {
+     console.error("Register error:", error); // Add this line to log error details
     return res.status(500).json({
+      
       message: "Server error",
       error: error.message,
       success: false,

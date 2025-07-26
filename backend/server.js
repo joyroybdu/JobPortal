@@ -24,7 +24,7 @@ app.use(cors(corsOptions)); // Enables CORS for the Express app
 const port = process.env.PORT||3000;
 
 //api
-app.use("/api/v1/User",userRoute);
+app.use("/api/v1/user",userRoute);
 app.use("/api/v1/Company",companyRoute);
 app.use('/api/v1/job', jobRoutes);
 app.use('/api/v1/application', applicationRoutes);
