@@ -3,8 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Job = () => {
+
  const navigate = useNavigate();
   const jobId = "12345"; // Example job ID, replace with actual logic to get job ID
   return (
